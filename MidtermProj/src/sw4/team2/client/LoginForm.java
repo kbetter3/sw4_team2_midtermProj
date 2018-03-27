@@ -57,7 +57,7 @@ public class LoginForm extends JFrame {
 				if (login) {
 					// 로그인 성공
 				} else {
-					JOptionPane.showMessageDialog(LoginForm.this, "아이디/비밀번호가 옳바르지 않습니다.", "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(LoginForm.this, "아이디/비밀번호가 올바르지 않습니다.", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				
 				sock.close();
@@ -70,9 +70,16 @@ public class LoginForm extends JFrame {
 		loginBtn.addActionListener(loginBtnListener);
 		
 		ActionListener regBtnListener = (e)->{
-			
+			RegForm rf = new RegForm();
+			rf.setModal(true);
+			rf.setVisible(true);
 		};
 		regBtn.addActionListener(regBtnListener);
+		
+		ActionListener exitBtnListener = (e)->{
+			LoginForm.this.dispose();
+		};
+		exitBtn.addActionListener(exitBtnListener);
 	}
 
 	private void menu() {
