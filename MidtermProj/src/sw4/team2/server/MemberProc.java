@@ -12,6 +12,8 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
+import sw4.team2.common.Member;
+
 public class MemberProc {
 	private File memberFile;
 	
