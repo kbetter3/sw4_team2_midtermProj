@@ -35,7 +35,7 @@ public class LoginForm extends JFrame {
 		event();
 		
 		this.setTitle("Login");
-		this.setBounds(100, 100, 535, 362);
+		this.setBounds(100, 100, 453, 365);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setVisible(true);
@@ -89,36 +89,41 @@ public class LoginForm extends JFrame {
 		mainPanel.add(loginImageLbl);
 		
 		idLbl = new JLabel("아이디");
-		idLbl.setBounds(59, 170, 57, 15);
+		idLbl.setBounds(42, 153, 95, 35);
 		idLbl.setHorizontalAlignment(JLabel.RIGHT);
 		mainPanel.add(idLbl);
 		
 		pwLbl = new JLabel("비밀번호");
-		pwLbl.setBounds(59, 236, 57, 15);
+		pwLbl.setBounds(42, 219, 95, 35);
 		pwLbl.setHorizontalAlignment(JLabel.RIGHT);
 		mainPanel.add(pwLbl);
 		
 		idTf = new JTextField();
-		idTf.setBounds(128, 153, 116, 50);
+		idTf.setBounds(185, 153, 181, 35);
 		idTf.setColumns(12);
 		idTf.setToolTipText("아이디를 입력하세요");
 		mainPanel.add(idTf);
 		
 		pwTf = new JTextField();
-		pwTf.setBounds(128, 219, 116, 50);
+		pwTf.setBounds(185, 219, 181, 35);
 		pwTf.setColumns(12);
 		pwTf.setToolTipText("비밀번호를 입력하세요");
 		mainPanel.add(pwTf);
 		
 		loginBtn = new JButton();
-		loginBtn.setBounds(338, 153, 128, 116);
+		loginBtn.setBounds(42, 281, 111, 23);
 		loginBtn.setIcon(fit(loginBtn, new ImageIcon("img/loginBtnImg.png")));
 		mainPanel.add(loginBtn);
 		
 		regBtn = new JButton();
-		regBtn.setBounds(193, 290, 173, 23);
+		regBtn.setBounds(165, 281, 111, 23);
 		regBtn.setIcon(fit(regBtn, new ImageIcon("img/regBtnImg.png")));
 		mainPanel.add(regBtn);
+		
+		exitBtn = new JButton();
+		exitBtn.setBounds(288, 281, 111, 23);
+		exitBtn.setIcon(fit(exitBtn,new ImageIcon("img/exitBtnImg.png")));
+		mainPanel.add(exitBtn);
 	}
 	
 	private ImageIcon fit(Component c, ImageIcon icon) {
