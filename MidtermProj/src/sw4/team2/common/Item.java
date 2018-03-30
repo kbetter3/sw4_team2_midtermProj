@@ -21,6 +21,7 @@ public class Item implements Serializable {
 	public static final int TYPE_SHAKER = 6;
 	public static final int TYPE_MIXINGGLASS_AND_STRAINER= 7;
 	public static final int TYPE_BLENDER = 8;
+	public static final int TYPE_METHOD = 9;
 	//==============Beverage°ü·Ã=========================
 	public static final int SECTION_ALCOHOLIC = 0;
 	public static final int SECTION_ADD_ALCOHOILC = 1;
