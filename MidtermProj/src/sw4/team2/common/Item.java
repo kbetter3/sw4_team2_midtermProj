@@ -7,6 +7,7 @@ public class Item implements Serializable {
 	
 	private String name;
 	private String engName;
+	private int beverageSection;
 	private int beverageType;
 	private int type;
 	
@@ -18,9 +19,12 @@ public class Item implements Serializable {
 	public static final int TYPE_BARSOPPN = 4;
 	public static final int TYPE_COCKTAILPICK = 5;
 	public static final int TYPE_SHAKER = 6;
-	public static final int TYPE_MIXINGGLASS = 7;
-	public static final int TYPE_STRAINER = 8;
-	public static final int TYPE_BLENDER = 9;
+	public static final int TYPE_MIXINGGLASS_AND_STRAINER= 7;
+	public static final int TYPE_BLENDER = 8;
+	//==============Beverage관련=========================
+	public static final int SECTION_ALCOHOLIC = 0;
+	public static final int SECTION_ADD_ALCOHOILC = 1;
+	public static final int SECTION_NON_ALCOHOLIC = 2;
 	//==============Beverage관련=========================
 	public static final int BEVERAGE_BACARDIWHITERUM=0;
 	public static final int BEVERAGE_BOURBONWHISKEY=1;
@@ -76,6 +80,7 @@ public class Item implements Serializable {
 	public static final int BEVERAGE_TOMATOJUICE=51;
 	public static final int BEVERAGE_PINEAPPLEJUICE=52;
 	public static final int BEVERAGE_PINACOLADAMIX=53;
+	public static final int BEVERAGE_NONE = -1;
 	//=============Garnishe타입===========================혹시나 쓸까봐 다 만들어놨음..====
 	public static final int GARNISHE_REDCHERRY=0;
 	public static final int GARNISHE_GREENOLIVE=1;
@@ -95,9 +100,10 @@ public class Item implements Serializable {
 	public static final int ADDITIONAL_CRUSHEDICE=6;
 	//=============Tool타입=================================
 	
-	public Item(String name, String engName, int beverageType, int type) {
+	public Item(String name, String engName, int beverageSection, int beverageType, int type) {
 		this.name = name;
 		this.engName = engName;
+		this.beverageSection = beverageSection;
 		this.beverageType = beverageType;
 		this.type = type;
 	}
@@ -108,6 +114,10 @@ public class Item implements Serializable {
 
 	public String getEngName() {
 		return engName;
+	}
+	
+	public int getBeverageSection() {
+		return beverageSection;
 	}
 
 	public int getBeverageType() {
