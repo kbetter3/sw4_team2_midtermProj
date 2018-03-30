@@ -3,10 +3,19 @@ package sw4.team2.client;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,16 +23,28 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 import sw4.team2.common.Cocktail;
 
 public class QuizForm extends JFrame {
-	private JPanel testPanel;
-	private JPanel mainPanel, quizPanel, rightPanel;
+	private JPanel mainPanel;
+	private String userId;
+	
+	// ========================= Intro Panel =========================
+	private JPanel introPanel;
+	private boolean itemInfoDownloaded = false;
+	
+	// ========================= Select Panel =========================
+	private JPanel selectPanel;
+	
+	// ========================= Quiz Panel =========================
+	private JPanel quizPanel, rightPanel;
 	
 	private JPanel topPanel, cocktailNamePanel, timePanel;
 	private List<Cocktail> cocktailList = new ArrayList<>();
@@ -36,13 +57,25 @@ public class QuizForm extends JFrame {
 	private List<ItemButton> itemBtnList = new ArrayList<>();
 	private int selectedItemIndex = 0;
 	
+	private Color pinkColor = new Color(255, 202, 219);
 	
-	
-	private Color pink = new Color(255, 202, 219);
-	
-	public QuizForm() {
-		display();
-		event();
+	public QuizForm(String uId) {
+		this.userId = uId;
+		
+		mainPanel = new JPanel();
+		mainPanel.setLayout(null);
+		this.setContentPane(mainPanel);
+		
+		initIntroPanel();
+		initSelectPanel();
+		
+		
+		// TODO init QuizPanel
+//		selectDisplay();
+//		quizDisplay();
+//		event();
+		
+		showIntroPanel();
 		
 		this.setBounds(0, 0, 1600, 900);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -50,22 +83,91 @@ public class QuizForm extends JFrame {
 		this.setVisible(true);
 	}
 
-	private void event() {
-		ActionListener changeSelectedItemListener = (e)->{
+	private void showIntroPanel() {
+		mainPanel.removeAll();
+		
+		mainPanel.add(introPanel);
+		
+		mainPanel.revalidate();
+		mainPanel.repaint();
+		
+		/*
+		ItemInfoDownloadThread t = new ItemInfoDownloadThread();
+		t.setDaemon(true);
+		t.start();
+		
+		for (int i = 0; i < 3; i++) {
+			try {
+				Thread.sleep(1500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			
-		};
+			if (itemInfoDownloaded)
+				break;
+		}
+		
+		if (itemInfoDownloaded) {
+			showSelectPanel();
+		} else {
+			JOptionPane.showConfirmDialog(introPanel, "Fail to download item information",	"Error", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+			System.exit(0);
+		}
+		*/
+	}
+	
+	private void initIntroPanel() {
+		introPanel = new JPanel();
+		introPanel.setBackground(Color.LIGHT_GRAY);
+		introPanel.setBounds(0, 0, 1600, 900);
+		introPanel.setLayout(null);
+		
+		// TODO intro image
+		/*
+		JLabel introIconLabel = new JLabel();
+		introIconLabel.setIcon(new ImageIcon("filename"));
+		introPanel.add(introIconLabel);
+		*/
 	}
 
-	private void display() {
+	private void showSelectPanel() {
+		mainPanel.removeAll();
+		
+		mainPanel.add(selectPanel);
+		
+		mainPanel.revalidate();
+		mainPanel.repaint();
+	}
+
+	private void initSelectPanel() {
+		selectPanel = new JPanel();
+		selectPanel.setBounds(0, 0, 1600, 900);
+		selectPanel.setLayout(null);
+		
+		JButton practiceBtn = new JButton("연습모드");
+		practiceBtn.setBounds(150, 200, 400, 500);
+		selectPanel.add(practiceBtn);
+		
+		JButton wanBtn = new JButton("오답노트");
+		wanBtn.setBounds(150 + 450, 200, 400, 500);
+		selectPanel.add(wanBtn);
+		
+		JButton examBtn = new JButton("연습모드");
+		examBtn.setBounds(150 + 900, 200, 400, 500);
+		selectPanel.add(examBtn);
+		
+		JButton exitBtn = new JButton("종료하기");
+		exitBtn.setBounds(1300, 775, 250, 75);
+		selectPanel.add(exitBtn);
+		
+		// TODO Add ActionListener
+	}
+
+	private void quizDisplay() {
 		mainPanel = new JPanel();
 		mainPanel.setLayout(null);
 		mainPanel.setBounds(0, 0, 1600, 900);
 		this.setContentPane(mainPanel);
-		
-		
-		
-		GridLayout gl = new GridLayout(7, 2);
-		gl.setHgap(30);
 		
 		displayTopPanel();
 		displayLeftPanel();
@@ -79,7 +181,7 @@ public class QuizForm extends JFrame {
 		mainPanel.add(quizPanel);
 		
 		rightPanel = new JPanel();
-		rightPanel.setLayout(gl);
+		rightPanel.setLayout(null);
 		rightPanel.setBounds(1300, 200, 300, 700);
 		rightPanel.setBackground(Color.BLUE);
 		mainPanel.add(rightPanel);
@@ -124,7 +226,6 @@ public class QuizForm extends JFrame {
 
 	private void displayCocktailNamePanel() {
 		cocktailNamePanel.removeAll();
-		cocktailNamePanel.revalidate();
 		
 		for (int i = 0; i < cocktailList.size(); i++) {
 			JLabel cocktail = new JLabel("cocktail " + (i + 1));
@@ -135,19 +236,20 @@ public class QuizForm extends JFrame {
 		}
 		
 		cocktailNamePanel.revalidate();
+		cocktailNamePanel.repaint();
 	}
 
 	private void displayLeftPanel() {
 		leftPanel = new JPanel();
 		leftPanel.setBounds(0, 200, 300, 700);
 		leftPanel.setLayout(null);
-		leftPanel.setBackground(pink);
+		leftPanel.setBackground(pinkColor);
 		
 		itemPanel = new JPanel();
 		itemPanel.setLayout(null);
 		itemPanel.setSize(300, 600);
 		itemPanel.setLocation(0, 100);
-		itemPanel.setBackground(pink);
+		itemPanel.setBackground(pinkColor);
 		leftPanel.add(itemPanel);
 		
 		displaySelectedItemBtn();
@@ -169,33 +271,6 @@ public class QuizForm extends JFrame {
 		
 		for (int i = 0; i < selectedBtnList.size(); i++) {
 			itemBtnList.add(selectedBtnList.get(i));
-			/*
-			selectedBtnList.get(i).addActionListener(e->{
-				testPanel = new JPanel();
-				testPanel.setBounds(0, 0, 1600, 900);
-				testPanel.setLayout(null);
-				testPanel.setBackground(Color.GREEN);
-				KeyStroke enterKs = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
-				Action enterAction = new AbstractAction() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						QuizForm.this.getContentPane().removeAll();
-						QuizForm.this.display();
-						QuizForm.this.getContentPane().revalidate();
-						QuizForm.this.getContentPane().repaint();
-						System.out.println("enter");
-					}
-				};
-				
-				testPanel.getInputMap().put(enterKs, "enter");
-				testPanel.getActionMap().put("enter", enterAction);
-				
-				this.getContentPane().removeAll();
-				this.getContentPane().add(testPanel);
-				this.getContentPane().revalidate();
-				this.getContentPane().repaint();
-			});
-			*/
 		}
 		
 		for (int i = selectedBtnList.size(); i < 14; i++) {
@@ -216,4 +291,24 @@ public class QuizForm extends JFrame {
 		itemPanel.revalidate();
 	}
 	
+	class ItemInfoDownloadThread extends Thread {
+		@Override
+		public void run() {
+			try {
+				Socket sock = new Socket(InetAddress.getByName("kbetter3.iptime.org"), 28130);
+				ObjectInputStream ois = new ObjectInputStream(sock.getInputStream());
+				ois.readObject();
+				
+				itemInfoDownloaded = true;
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	// TODO Create WAN Thread & Request Quiz Method
 }
