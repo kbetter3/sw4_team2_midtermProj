@@ -8,7 +8,7 @@ public class Item implements Serializable {
 	private String name;
 	private String engName;
 	private int beverageSection;
-	private int beverageType;
+	private String beverageType;
 	private int type;
 	
 	// =================== 전체타입 ===================
@@ -101,7 +101,7 @@ public class Item implements Serializable {
 	public static final int ADDITIONAL_CRUSHEDICE=6;
 	//=============Tool타입=================================
 	
-	public Item(String name, String engName, int beverageSection, int beverageType, int type) {
+	public Item(String name, String engName, int beverageSection, String beverageType, int type) {
 		this.name = name;
 		this.engName = engName;
 		this.beverageSection = beverageSection;
@@ -121,7 +121,7 @@ public class Item implements Serializable {
 		return beverageSection;
 	}
 
-	public int getBeverageType() {
+	public String getBeverageType() {
 		return beverageType;
 	}
 
