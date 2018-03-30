@@ -9,7 +9,6 @@ public class RequestMessage implements Serializable {
 
 	private int requestType;
 	private int requestMode;
-	private String cocktailName;
 	private String userId;
 	private Set<String> cocktail;
 	
@@ -19,10 +18,9 @@ public class RequestMessage implements Serializable {
 	public static final int MODE_PRACTICE = 1;
 	public static final int MODE_EXAM = 3;
 	
-	public RequestMessage(int rType, int rMode, String cName, String uId, Set set) {
+	public RequestMessage(int rType, int rMode, String uId, Set set) {
 		this.requestType = rType;
 		this.requestMode = rMode;
-		this.cocktailName = cName;
 		this.userId = uId;
 		if (set == null) {
 			cocktail = new HashSet<>();
