@@ -25,6 +25,7 @@ public class Item implements Serializable {
 	public static final int SECTION_ALCOHOLIC = 0;
 	public static final int SECTION_ADD_ALCOHOILC = 1;
 	public static final int SECTION_NON_ALCOHOLIC = 2;
+	public static final int SECTION_NONE = -1;
 	//==============Beverage°ü·Ã=========================
 	public static final int BEVERAGE_BACARDIWHITERUM=0;
 	public static final int BEVERAGE_BOURBONWHISKEY=1;
