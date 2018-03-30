@@ -77,7 +77,7 @@ public class LoginForm extends JFrame {
 		regBtn.addActionListener(regBtnListener);
 		
 		ActionListener exitBtnListener = (e)->{
-			LoginForm.this.dispose();
+			System.exit(0);
 		};
 		exitBtn.addActionListener(exitBtnListener);
 	}
@@ -118,17 +118,17 @@ public class LoginForm extends JFrame {
 		mainPanel.add(pwTf);
 		
 		loginBtn = new JButton();
-		loginBtn.setBounds(42, 281, 111, 23);
+		loginBtn.setBounds(42, 281, 111, 35);
 		loginBtn.setIcon(fit(loginBtn, new ImageIcon("img/loginBtnImg.png")));
 		mainPanel.add(loginBtn);
 		
 		regBtn = new JButton();
-		regBtn.setBounds(165, 281, 111, 23);
+		regBtn.setBounds(165, 281, 111, 35);
 		regBtn.setIcon(fit(regBtn, new ImageIcon("img/regBtnImg.png")));
 		mainPanel.add(regBtn);
 		
 		exitBtn = new JButton();
-		exitBtn.setBounds(288, 281, 111, 23);
+		exitBtn.setBounds(288, 281, 111, 35);
 		exitBtn.setIcon(fit(exitBtn,new ImageIcon("img/exitBtnImg.png")));
 		mainPanel.add(exitBtn);
 	}
