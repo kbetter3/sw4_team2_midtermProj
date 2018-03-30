@@ -16,7 +16,7 @@ public class Item implements Serializable {
 	public static final int TYPE_BEVERAGE = 1;
 	public static final int TYPE_GARNISHES = 2;
 	public static final int TYPE_ADDITIONAL = 3;
-	public static final int TYPE_BARSOPPN = 4;
+	public static final int TYPE_BARSPOON = 4;
 	public static final int TYPE_COCKTAILPICK = 5;
 	public static final int TYPE_SHAKER = 6;
 	public static final int TYPE_MIXINGGLASS_AND_STRAINER= 7;
