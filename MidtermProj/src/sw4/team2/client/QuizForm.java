@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -54,12 +55,15 @@ public class QuizForm extends JFrame {
 	
 	private boolean cocktailInfoDownloaded = false, wanInfoDownloaded = false;
 	private Map<String, Cocktail> cocktailMap = null;
-	private int presentCocktailIndex = 0;
-	
+
 	private JPanel topPanel, cocktailNamePanel, timePanel;
 	private List<Cocktail> cocktailList = new ArrayList<>();
 	private List<JLabel> cocktailLabelList = new ArrayList<>();
+	private int currentCocktailIndex = 0;
+	private Cocktail currentCocktail = null;
 	// TODO add List<CocktailNamePanel>
+	
+	private int currentSelectStep = 0;
 	
 	private JPanel leftPanel, itemPanel;
 	private ItemButton currentSelectedBtn = null;
@@ -98,17 +102,36 @@ public class QuizForm extends JFrame {
 		this.setUndecorated(true);
 		this.setVisible(true);
 	}
+	
 
+
+	private void progCurrentQuiz() {
+		// TODO -> 현재 진행중인 CocktailLabel 보더 하이라이트
+		// TODO -> 아이템 선택 진행 (진행상황을 나눌 것)
+		// 		-> 아이템 선택시 ItemButton을 생성하여 LeftPanel에 추가해줄것
+		
+		
+		//		-> 
+	}
+	
 	private void showExamPanel() {
 		mainPanel.removeAll();
 		
-		presentCocktailIndex = 0;
 		// TODO create CocktailNamePanel Class and allocation
-//		for (String key : cocktailQuiz.keySet()) {
-//			JLabel label = new JLabel(key);
-//			label.setSize(160, 160);
-//			cocktailNamePanel.add(comp)
-//		}
+		
+		cocktailLabelList.clear();
+		for (String key : cocktailMap.keySet()) {
+			JLabel label = new JLabel(key);
+			label.setSize(160, 160);
+			label.setBorder(BorderFactory.createLineBorder(Color.GRAY, 8, true));
+			cocktailLabelList.add(label);
+			cocktailNamePanel.add(label);
+		}
+		
+		currentCocktailIndex = 0;
+		currentCocktail = cocktailMap.get(cocktailLabelList.get(currentCocktailIndex));
+		
+		// TODO 반복문을 돌면서 퀴즈를 진행할 것 -> progCurrentQuiz(int index)
 		
 		mainPanel.add(examPanel);
 		mainPanel.revalidate();
@@ -200,6 +223,10 @@ public class QuizForm extends JFrame {
 		t.setDaemon(true);
 		t.start();
 		
+		// TODO delete below testLine
+		itemInfoDownloaded = true;	// must delete this line
+		itemInfoMap = (Map<Integer, Item>) new ObjectInputStream(new FileInputStream(new File("item.db")));
+		
 		Timer timer = new Timer();
 		TimerTask task = new TimerTask() {
 			@Override
@@ -261,7 +288,7 @@ public class QuizForm extends JFrame {
 		wanBtn.setBounds(150 + 450, 200, 400, 500);
 		selectPanel.add(wanBtn);
 		
-		JButton examBtn = new JButton("연습모드");
+		JButton examBtn = new JButton("실전모드");
 		examBtn.setBounds(150 + 900, 200, 400, 500);
 		selectPanel.add(examBtn);
 		
@@ -271,6 +298,7 @@ public class QuizForm extends JFrame {
 		
 		// TODO Add ActionListener
 		practiceBtn.addActionListener(e->{showExamPanel();});
+		examBtn.addActionListener(e->{showExamPanel();});
 		exitBtn.addActionListener(e->{System.exit(0);});
 		
 	}

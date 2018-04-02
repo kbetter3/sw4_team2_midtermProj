@@ -3,6 +3,7 @@ package sw4.team2.client;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -18,7 +19,12 @@ import javax.swing.JButton;
 public class ItemButton extends JButton {
 	private ImageIcon bgIcon;
 	private BufferedImage normalImg, pressedImg, bgImg;
-	private MouseListener listener;
+	private MouseListener listenerPress;
+	private int currentMode = -1;
+	
+	public static final int MODE_SHOW = 0;
+	public static final int MODE_SELECT = 1;
+	public static final int MODE_MAKE = 2;
 	
 	public ItemButton(ImageIcon icon, int width, int height) {
 		super(icon);
@@ -44,7 +50,7 @@ public class ItemButton extends JButton {
 	}	
 
 	private void event() {
-		listener = new MouseAdapter(){
+		listenerPress = new MouseAdapter(){
 			@Override
 			public void mousePressed(MouseEvent e) {
 				bgImg = pressedImg;
@@ -57,7 +63,7 @@ public class ItemButton extends JButton {
 				ItemButton.this.repaint();
 			}
 		};
-		this.addMouseListener(listener);
+		this.addMouseListener(listenerPress);
 	}
 	
 	@Override
@@ -71,7 +77,7 @@ public class ItemButton extends JButton {
 		
 		btn.setEnabled(false);
 		btn.setBorder(null);
-		btn.removeMouseListener(btn.listener);
+		btn.removeMouseListener(btn.listenerPress);
 		return btn;
 	}
 }
