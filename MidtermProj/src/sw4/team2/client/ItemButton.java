@@ -67,10 +67,10 @@ public class ItemButton extends JButton {
 	}
 	
 	public static ItemButton emptyBtn() {
-//		ItemButton btn = new ItemButton(new ImageIcon("img/emptyBtn.png"), 74, 74);
-		ItemButton btn = new ItemButton(new ImageIcon("img/GREEN CREAMED MINT.png"), 74, 74);
+		ItemButton btn = new ItemButton(new ImageIcon("img/emptyBtn.png"), 74, 74);
 		
 		btn.setEnabled(false);
+		btn.setBorder(null);
 		btn.removeMouseListener(btn.listener);
 		return btn;
 	}

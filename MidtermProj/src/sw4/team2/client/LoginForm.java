@@ -45,7 +45,7 @@ public class LoginForm extends JFrame {
 		ActionListener loginBtnListener = (e)->{
 			try {
 				boolean login = false;
-				member = new Member(idTf.getText(), pwTf.getText(), Member.REGISTER);
+				member = new Member(idTf.getText(), pwTf.getText(), Member.LOGIN);
 				Socket sock = new Socket(InetAddress.getByName("kbetter3.iptime.org"), 2240);
 				ObjectOutputStream oos = new ObjectOutputStream(sock.getOutputStream());
 				oos.writeObject(member);
@@ -56,6 +56,9 @@ public class LoginForm extends JFrame {
 				
 				if (login) {
 					// 로그인 성공
+					QuizForm qf = new QuizForm(member.getId());
+					qf.setVisible(true);
+					LoginForm.this.dispose();
 				} else {
 					JOptionPane.showMessageDialog(LoginForm.this, "아이디/비밀번호가 올바르지 않습니다.", "Error", JOptionPane.ERROR_MESSAGE);
 				}

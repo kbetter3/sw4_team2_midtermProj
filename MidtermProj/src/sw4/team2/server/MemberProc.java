@@ -9,6 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -75,6 +76,7 @@ public class MemberProc {
 			
 			thread.setDaemon(true);
 			thread.start();
+			System.out.println("MemberProc is running");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -90,6 +92,12 @@ public class MemberProc {
 		try {
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(memberFile));
 			member = (Map<String, String>) ois.readObject();
+			
+			System.out.println(m.getId() + " / " + m.getPw());
+			
+			for (String key : member.keySet()) {
+				System.out.println(key + " : " + member.get(key));
+			}
 			
 			if (member.containsKey(m.getId()) && member.get(m.getId()).equals(m.getPw())) {
 				login = true;

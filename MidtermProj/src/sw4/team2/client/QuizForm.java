@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,6 +34,7 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 import sw4.team2.common.Cocktail;
+import sw4.team2.common.Item;
 import sw4.team2.common.RequestMessage;
 
 public class QuizForm extends JFrame {
@@ -44,6 +44,7 @@ public class QuizForm extends JFrame {
 	// ========================= Intro Panel =========================
 	private JPanel introPanel;
 	private boolean itemInfoDownloaded = false;
+	private Map<Integer, Item> itemInfoMap = null;
 	
 	// ========================= Select Panel =========================
 	private JPanel selectPanel;
@@ -52,7 +53,7 @@ public class QuizForm extends JFrame {
 	private JPanel examPanel, quizPanel, rightPanel;
 	
 	private boolean cocktailInfoDownloaded = false, wanInfoDownloaded = false;
-	private Map<String, Cocktail> cocktailQuiz = new HashMap<>();
+	private Map<String, Cocktail> cocktailMap = null;
 	private int presentCocktailIndex = 0;
 	
 	private JPanel topPanel, cocktailNamePanel, timePanel;
@@ -82,10 +83,10 @@ public class QuizForm extends JFrame {
 		
 		initIntroPanel();
 		initSelectPanel();
-		
-		
-		// TODO init QuizPanel
+		// TODO init examPanel
 		initExamPanel();
+		
+		
 //		selectDisplay();
 //		quizDisplay();
 //		event();
@@ -206,13 +207,10 @@ public class QuizForm extends JFrame {
 				for (int i = 0; i < 3; i++) {
 					try {
 						Thread.sleep(1500);
+						if (itemInfoDownloaded)
+							break;
 					} catch (InterruptedException e) {
 						e.printStackTrace();
-					}
-					
-					if (i == 1) {
-						itemInfoDownloaded = true;
-						break;
 					}
 					
 				}
@@ -310,7 +308,9 @@ public class QuizForm extends JFrame {
 			try {
 				Socket sock = new Socket(InetAddress.getByName("kbetter3.iptime.org"), 28130);
 				ObjectInputStream ois = new ObjectInputStream(sock.getInputStream());
-				ois.readObject();
+				itemInfoMap = (Map<Integer, Item>) ois.readObject();
+				
+				System.out.println("iteminfo Size : " + itemInfoMap.size());
 				
 				itemInfoDownloaded = true;
 			} catch (UnknownHostException e) {
@@ -335,8 +335,10 @@ public class QuizForm extends JFrame {
 				oos.flush();
 				
 				ObjectInputStream ois = new ObjectInputStream(sock.getInputStream());
-				cocktailQuiz = (Map<String, Cocktail>) ois.readObject();
+				cocktailMap = (Map<String, Cocktail>) ois.readObject();
 				cocktailInfoDownloaded = true;
+				
+				System.out.println("cocktailMap Size : " + cocktailMap.size());
 				
 				showExamPanel();
 			} catch (UnknownHostException e) {

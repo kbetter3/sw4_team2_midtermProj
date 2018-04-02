@@ -28,4 +28,20 @@ public class RequestMessage implements Serializable {
 			cocktail = set;
 		}
 	}
+
+	public int getRequestType() {
+		return requestType;
+	}
+
+	public int getRequestMode() {
+		return requestMode;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public Set<String> getCocktail() {
+		return cocktail;
+	}
 }
