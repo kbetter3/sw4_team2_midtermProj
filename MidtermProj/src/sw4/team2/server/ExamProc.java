@@ -83,6 +83,8 @@ public class ExamProc {
 					userMap = wanMap.get(userID);
 				}
 				
+				System.out.println(sock.getInetAddress() + "\t" + userID + " " + userMap.size());
+				
 				oos = new ObjectOutputStream(sock.getOutputStream());
 				oos.writeObject(userMap);
 				oos.flush();

@@ -12,6 +12,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -315,9 +317,23 @@ public class QuizForm extends JFrame {
       bottomBtnPanel.setLayout(null);
       bottomBtnPanel.setOpaque(false);
       
-      selectMixBtn = new JButton("조주하기");
+      // 조주하기
+      selectMixBtn = new JButton();
       selectMixBtn.setBounds(150, 0, 300, 50);
+      selectMixBtn.setBorder(null);
+      selectMixBtn.setContentAreaFilled(false);
+      selectMixBtn.setIcon(new ImageIcon("img/selectMixNormal.png"));
       selectMixBtn.setEnabled(false);
+      selectMixBtn.addMouseListener(new MouseAdapter(){
+    	  @Override
+    	public void mousePressed(MouseEvent e) {
+    		  selectMixBtn.setIcon(new ImageIcon("img/selectMixPressed.png"));
+    	}
+    	  @Override
+    	public void mouseReleased(MouseEvent e) {
+    		  selectMixBtn.setIcon(new ImageIcon("img/selectMixNormal.png"));
+    	}
+      });
       selectMixBtn.addActionListener(e->{
          Item item = null;
          
@@ -349,8 +365,22 @@ public class QuizForm extends JFrame {
       });
       bottomBtnPanel.add(selectMixBtn);
       
-      submitBtn = new JButton("제출하기");
+      // 제출하기
+      submitBtn = new JButton();
       submitBtn.setBounds(550, 0, 300, 50);
+      submitBtn.setBorder(null);
+      submitBtn.setContentAreaFilled(false);
+      submitBtn.setIcon(new ImageIcon("img/submitNormal.png"));
+      submitBtn.addMouseListener(new MouseAdapter(){
+    	  @Override
+    	public void mousePressed(MouseEvent e) {
+    		  submitBtn.setIcon(new ImageIcon("img/submitPressed.png"));
+    	}
+    	  @Override
+    	public void mouseReleased(MouseEvent e) {
+    		  submitBtn.setIcon(new ImageIcon("img/submitNormal.png"));
+    	}
+      });
       submitBtn.addActionListener((event)->{
          if (recipeBtnList.size() > 0) {
             List<Recipe> userRecipe = new ArrayList<>();
@@ -506,7 +536,21 @@ public class QuizForm extends JFrame {
       bottomBtnPanel.setLayout(null);
       bottomBtnPanel.setOpaque(false);
       
-      JButton beforeBtn = new JButton("<");
+      // <
+      JButton beforeBtn = new JButton();
+      beforeBtn.setBorder(null);
+      beforeBtn.setIcon(new ImageIcon("img/beforeNormal.png"));
+      beforeBtn.setContentAreaFilled(false);
+      beforeBtn.addMouseListener(new MouseAdapter(){
+    	  @Override
+    	public void mousePressed(MouseEvent e) {
+    		  beforeBtn.setIcon(new ImageIcon("img/beforePressed.png"));
+    	}
+    	  @Override
+    	public void mouseReleased(MouseEvent e) {
+    		  beforeBtn.setIcon(new ImageIcon("img/beforeNormal.png"));
+    	}
+      });
       beforeBtn.addActionListener(e->{
          currentChapter--;
          if (currentChapter == 0)
@@ -514,12 +558,26 @@ public class QuizForm extends JFrame {
          initSelectItemPanel();
          changeQuizPanel(selectItemPanel);
       });
-      beforeBtn.setBounds(0, 0, 60, 50);
+      beforeBtn.setBounds(20, 0, 60, 50);
       bottomBtnPanel.add(beforeBtn);
       
-      mixingBtn = new JButton("선택완료");
+      // 선택완료
+      mixingBtn = new JButton();
       mixingBtn.setBounds(250, 0, 500, 50);
       mixingBtn.setEnabled(false);
+      mixingBtn.setBorder(null);
+      mixingBtn.setContentAreaFilled(false);
+      mixingBtn.setIcon(new ImageIcon("img/mixingNormal.png"));
+      mixingBtn.addMouseListener(new MouseAdapter(){
+    	  @Override
+    	public void mousePressed(MouseEvent e) {
+    		  mixingBtn.setIcon(new ImageIcon("img/mixingPressed.png"));
+    	}
+    	  @Override
+    	public void mouseReleased(MouseEvent e) {
+    		  mixingBtn.setIcon(new ImageIcon("img/mixingNormal.png"));
+    	}
+      });
 
       mixingBtn.addActionListener(e->{
          // TODO
@@ -537,8 +595,22 @@ public class QuizForm extends JFrame {
       });
       bottomBtnPanel.add(mixingBtn);
       
-      JButton nextBtn = new JButton(">");
-      nextBtn.setBounds(940, 0, 60, 50);
+      // >
+      JButton nextBtn = new JButton();
+      nextBtn.setBorder(null);
+      nextBtn.setContentAreaFilled(false);
+      nextBtn.setIcon(new ImageIcon("img/nextNormal.png"));
+      nextBtn.setBounds(920, 0, 60, 50);
+      nextBtn.addMouseListener(new MouseAdapter(){
+    	  @Override
+    	public void mousePressed(MouseEvent e) {
+    		  nextBtn.setIcon(new ImageIcon("img/nextPressed.png"));
+    	}
+    	  @Override
+    	public void mouseReleased(MouseEvent e) {
+    		  nextBtn.setIcon(new ImageIcon("img/nextNormal.png"));
+    	}
+      });
       nextBtn.addActionListener(e->{
          currentChapter++;
          if (currentChapter == 9)
@@ -572,8 +644,22 @@ public class QuizForm extends JFrame {
       nameLabel.setFont(new Font("", Font.PLAIN, 80));
       startQuizPanel.add(nameLabel);
       
-      JButton startBtn = new JButton("start");
+      // start 시작하기
+      JButton startBtn = new JButton();
+      startBtn.setBorder(null);
+      startBtn.setContentAreaFilled(false);
       startBtn.setBounds(300, 440, 400, 100);
+      startBtn.setIcon(new ImageIcon("img/startNormal.png"));
+      startBtn.addMouseListener(new MouseAdapter(){
+    	  @Override
+    	public void mousePressed(MouseEvent e) {
+    		  startBtn.setIcon(new ImageIcon("img/startPressed.png"));
+    	}
+    	  @Override
+    	public void mouseReleased(MouseEvent e) {
+    		  startBtn.setIcon(new ImageIcon("img/startNormal.png"));
+    	}
+      });
       startBtn.addActionListener(e->{
          currentChapter = 0;
 //         timer.schedule(timerTask, 1000);
@@ -602,7 +688,7 @@ public class QuizForm extends JFrame {
       rightPanel.setBounds(1300, 190, 300, 710);
       rightPanel.setLayout(null);
       
-      JLabel rBox = new JLabel("주조");
+      JLabel rBox = new JLabel("조주");
       rBox.setVerticalAlignment(JLabel.CENTER);
       rBox.setHorizontalAlignment(JLabel.CENTER);
       rBox.setFont(new Font("", 0, 20));
@@ -617,8 +703,22 @@ public class QuizForm extends JFrame {
       rightPanel.add(recipePanel);
       displayRecipeBtn();
       
-      exitBtn = new JButton("종료하기");
+      // 종료하기
+      exitBtn = new JButton();
       exitBtn.setBounds(0, 650, 300, 60);
+      exitBtn.setBorder(null);
+      exitBtn.setContentAreaFilled(false);
+      exitBtn.setIcon(new ImageIcon("img/exitNormal.png"));
+      exitBtn.addMouseListener(new MouseAdapter(){
+    	  @Override
+    	public void mousePressed(MouseEvent e) {
+    		  exitBtn.setIcon(new ImageIcon("img/exitPressed.png"));
+    	}
+    	  @Override
+    	public void mouseReleased(MouseEvent e) {
+    		  exitBtn.setIcon(new ImageIcon("img/exitNormal.png"));
+    	}
+      });
       exitBtn.addActionListener((e)->{System.exit(0);});
       rightPanel.add(exitBtn);
       
@@ -791,7 +891,7 @@ public class QuizForm extends JFrame {
       
       resultCocktailPanel = new JPanel();
       resultCocktailPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 40, 0));
-      resultCocktailPanel.setBounds(0, 300, 1600, 300);
+      resultCocktailPanel.setBounds(0, 200, 1600, 300);
       
       Map<String, Cocktail> resultMap = new HashMap<>();
       Cocktail userCocktail, serverCocktail;
@@ -875,7 +975,7 @@ public class QuizForm extends JFrame {
       
       // TODO 뒤로가기 버튼 생성 -> SelectForm으로 이동
       JButton backBtn = new JButton("뒤로가기");
-      backBtn.setBounds(550, 650, 500, 150);
+      backBtn.setBounds(550, 550, 500, 150);
       backBtn.addActionListener(e->{
     	  SelectForm sf = new SelectForm(userId);
     	  QuizForm.this.dispose();
