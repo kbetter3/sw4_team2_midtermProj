@@ -3,6 +3,7 @@ package sw4.team2.server;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -20,6 +21,8 @@ import sw4.team2.common.RequestMessage;
 public class ExamProc {
 	private ServerSocket itemServer;
 	private ServerSocket cocktailServer;
+	private ServerSocket wanServer;
+	
 	public ExamProc() {
 		try {
 			itemServer = new ServerSocket(28130);
@@ -33,8 +36,83 @@ public class ExamProc {
 			crt.setDaemon(true);
 			crt.start();
 			System.out.println("CocktailRequestThread is running");
+			
+			wanServer = new ServerSocket(28129);
+			WANThread want = new WANThread();
+			want.setDaemon(true);
+			want.start();
+			System.out.println("WANThread is running");
+			
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	class WANSendThread extends Thread {
+		private Socket sock;
+		public WANSendThread(Socket sock) {
+			this.sock = sock;
+		}
+		
+		@Override
+		public void run() {
+			ObjectOutputStream oos;
+			ObjectInputStream ois;
+			File f = new File("files/wan.db");
+			Map<String, Map<String, Cocktail>> wanMap;
+			Map<String, Cocktail> userMap = new HashMap<>();
+			
+			try {
+				if (!f.exists()) {
+					f.createNewFile();
+					wanMap = new HashMap<>();
+					oos = new ObjectOutputStream(new FileOutputStream(new File("files/wan.db")));
+					oos.writeObject(wanMap);
+					oos.flush();
+					oos.close();
+				} else {
+					ois = new ObjectInputStream(new FileInputStream(f));
+					wanMap = (Map<String, Map<String, Cocktail>>) ois.readObject();
+					ois.close();
+				}
+				
+				ois = new ObjectInputStream(sock.getInputStream());
+				String userID = (String) ois.readObject();
+				
+				if (wanMap.containsKey(userID)) {
+					userMap = wanMap.get(userID);
+				}
+				
+				oos = new ObjectOutputStream(sock.getOutputStream());
+				oos.writeObject(userMap);
+				oos.flush();
+				oos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+			
+			
+		}
+	}
+	
+	class WANThread extends Thread {
+		@Override
+		public void run() {
+			try {
+				while (true) {
+					System.out.println("WAN ready");
+					Socket sock = wanServer.accept();
+					System.out.println(sock.getInetAddress() + "\treq WAN");
+					
+					WANSendThread t = new WANSendThread(sock);
+					t.setDaemon(true);
+					t.start();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -145,6 +223,42 @@ public class ExamProc {
 					
 				case RequestMessage.TYPE_WAN :
 					// TODO make WAN file and read and after send
+					/*
+					 * Map<String id, Map<String, Cocktail>>
+					 */
+					Map<String, Map<String, Cocktail>> wanMap;
+					File wanFile = new File("files/wan.db");
+					ObjectOutputStream os;
+					ObjectInputStream is;
+					
+					if (!wanFile.exists()) {
+						wanFile.createNewFile();
+						wanMap = new HashMap<>();
+						os = new ObjectOutputStream(new FileOutputStream(wanFile));
+						os.writeObject(wanMap);
+						os.flush();
+						os.close();
+					}
+					
+					is = new ObjectInputStream(new FileInputStream(wanFile));
+					wanMap = (Map<String, Map<String, Cocktail>>) is.readObject();
+					
+					Map<String, Cocktail> userMap;
+					
+					if (wanMap.containsKey(message.getUserId())) {
+						userMap = wanMap.get(message.getUserId());
+					} else {
+						userMap = new HashMap<>();
+					}
+					
+					for (String key : message.getCocktailMap().keySet()) {
+						userMap.put(key, message.getCocktailMap().get(key));
+					}
+					wanMap.put(message.getUserId(), userMap);
+					os = new ObjectOutputStream(new FileOutputStream(wanFile));
+					os.writeObject(wanMap);
+					os.flush();
+					os.close();
 					break;
 				}
 				

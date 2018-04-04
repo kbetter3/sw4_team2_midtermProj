@@ -10,6 +10,8 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.GeneralSecurityException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -93,11 +95,15 @@ public class MemberProc {
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(memberFile));
 			member = (Map<String, String>) ois.readObject();
 			
-			System.out.println(m.getId() + " / " + m.getPw());
+			SimpleDateFormat format = new SimpleDateFormat("MM:dd a hh:mm:ss");
 			
+			System.out.println(format.format(Calendar.getInstance().getTime()) + " " + m.getId() + " / " + m.getPw());
+			
+			/*
 			for (String key : member.keySet()) {
 				System.out.println(key + " : " + member.get(key));
 			}
+			*/
 			
 			if (member.containsKey(m.getId()) && member.get(m.getId()).equals(m.getPw())) {
 				login = true;
