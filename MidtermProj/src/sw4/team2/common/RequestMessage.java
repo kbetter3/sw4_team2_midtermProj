@@ -1,7 +1,9 @@
 package sw4.team2.common;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class RequestMessage implements Serializable {
@@ -10,7 +12,7 @@ public class RequestMessage implements Serializable {
 	private int requestType;
 	private int requestMode;
 	private String userId;
-	private Set<String> cocktail;
+	private Map<String, Cocktail> cocktailMap;
 	
 	public static final int TYPE_REQUEST = 0;
 	public static final int TYPE_WAN = 1;
@@ -18,14 +20,14 @@ public class RequestMessage implements Serializable {
 	public static final int MODE_PRACTICE = 1;
 	public static final int MODE_EXAM = 3;
 	
-	public RequestMessage(int rType, int rMode, String uId, Set set) {
+	public RequestMessage(int rType, int rMode, String uId, Map<String, Cocktail> cocktailMap) {
 		this.requestType = rType;
 		this.requestMode = rMode;
 		this.userId = uId;
-		if (set == null) {
-			cocktail = new HashSet<>();
+		if (cocktailMap == null) {
+			cocktailMap = new HashMap<>();
 		} else {
-			cocktail = set;
+			this.cocktailMap = cocktailMap;
 		}
 	}
 
@@ -41,7 +43,7 @@ public class RequestMessage implements Serializable {
 		return userId;
 	}
 
-	public Set<String> getCocktail() {
-		return cocktail;
+	public Map<String, Cocktail> getCocktailMap() {
+		return cocktailMap;
 	}
 }

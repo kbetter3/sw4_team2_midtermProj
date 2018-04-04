@@ -1,9 +1,6 @@
 package sw4.team2.client;
 
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -12,21 +9,25 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-public class ItemButton extends JButton {
+import sw4.team2.common.Recipe;
+
+public class RecipeButton extends JButton {
 	private ImageIcon bgIcon;
 	private BufferedImage normalImg, pressedImg, bgImg;
 	private MouseListener listenerPress;
 	private int type;
+	private Recipe recipe;
 	
-	public ItemButton(ImageIcon icon, int width, int height, int type) {
+	public RecipeButton(ImageIcon icon, int width, int height, int type, Recipe recipe) {
 		super(icon);
 		
 		this.type = type;
 		this.bgIcon = icon;
+		this.recipe = recipe;
+		
 		
 		try {
 			this.bgImg = this.normalImg = ImageIO.read(new File("img/normalBtn.png"));
@@ -39,6 +40,7 @@ public class ItemButton extends JButton {
 		this.setOpaque(false);
 		this.setContentAreaFilled(false);
 		this.setBorder(null);
+		this.setEnabled(false);
 		
 		this.setIcon(ImageResizer.fit(this, bgIcon));
 		
@@ -51,13 +53,13 @@ public class ItemButton extends JButton {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				bgImg = pressedImg;
-				ItemButton.this.repaint();
+				RecipeButton.this.repaint();
 			}
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				bgImg = normalImg;
-				ItemButton.this.repaint();
+				RecipeButton.this.repaint();
 			}
 		};
 		this.addMouseListener(listenerPress);
@@ -65,16 +67,20 @@ public class ItemButton extends JButton {
 	
 	@Override
 	protected void paintComponent(Graphics g) {
-		g.drawImage(bgImg, 0, 0, ItemButton.this.getWidth(), ItemButton.this.getHeight(), ItemButton.this);
-		g.drawImage(ImageResizer.fitImage(ItemButton.this, bgIcon), 0, 0, ItemButton.this);
+		g.drawImage(bgImg, 0, 0, RecipeButton.this.getWidth(), RecipeButton.this.getHeight(), RecipeButton.this);
+		g.drawImage(ImageResizer.fitImage(RecipeButton.this, bgIcon), 0, 0, RecipeButton.this);
 	}
 	
 	public int getType() {
 		return this.type;
 	}
 	
-	public static ItemButton emptyBtn() {
-		ItemButton btn = new ItemButton(new ImageIcon("img/emptyBtn.png"), 74, 74, -1);
+	public Recipe getRecipe() {
+		return this.recipe;
+	}
+	
+	public static RecipeButton emptyBtn() {
+		RecipeButton btn = new RecipeButton(new ImageIcon("img/emptyBtn.png"), 74, 74, -1, null);
 		
 		btn.setEnabled(false);
 		btn.setBorder(null);

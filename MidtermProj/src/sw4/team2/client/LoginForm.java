@@ -56,8 +56,11 @@ public class LoginForm extends JFrame {
 				
 				if (login) {
 					// 로그인 성공
-					QuizForm qf = new QuizForm(member.getId());
-					qf.setVisible(true);
+					// TODO QuizForm -> SelectForm 으로 변경하기
+//					QuizForm qf = new QuizForm(member.getId(), QuizForm.MODE_EXAM);
+//					qf.setVisible(true);
+					SelectForm sf = new SelectForm(member.getId());
+//					sf.setVisible(true);
 					LoginForm.this.dispose();
 				} else {
 					JOptionPane.showMessageDialog(LoginForm.this, "아이디/비밀번호가 올바르지 않습니다.", "Error", JOptionPane.ERROR_MESSAGE);

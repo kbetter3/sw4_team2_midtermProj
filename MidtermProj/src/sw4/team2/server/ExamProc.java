@@ -18,29 +18,39 @@ import sw4.team2.common.Item;
 import sw4.team2.common.RequestMessage;
 
 public class ExamProc {
-	
+	private ServerSocket itemServer;
+	private ServerSocket cocktailServer;
 	public ExamProc() {
-		ItemInfoThread iit = new ItemInfoThread();
-		iit.setDaemon(true);
-		iit.start();
-		System.out.println("ItemInfoProc is running");
-		
-		CocktailRequestThread crt = new CocktailRequestThread();
-		crt.setDaemon(true);
-		crt.start();
-		System.out.println("CocktailRequestThread is running");
+		try {
+			itemServer = new ServerSocket(28130);
+			ItemInfoThread iit = new ItemInfoThread();
+			iit.setDaemon(true);
+			iit.start();
+			System.out.println("ItemInfoProc is running");
+			
+			cocktailServer = new ServerSocket(28131);
+			CocktailRequestThread crt = new CocktailRequestThread();
+			crt.setDaemon(true);
+			crt.start();
+			System.out.println("CocktailRequestThread is running");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	class ItemInfoThread extends Thread {
 		@Override
 		public void run() {
 			try {
-				ServerSocket server = new ServerSocket(28130);
-				Socket sock = server.accept();
-				
-				ItemInfoSendThread t = new ItemInfoSendThread(sock);
-				t.setDaemon(true);
-				t.start();
+				while (true) {
+					System.out.println("item ready");
+					Socket sock = itemServer.accept();
+					System.out.println(sock.getInetAddress() + "\treq ItemInfo");
+					
+					ItemInfoSendThread t = new ItemInfoSendThread(sock);
+					t.setDaemon(true);
+					t.start();
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -59,12 +69,14 @@ public class ExamProc {
 			try {
 				File itemFile = new File("files/item.db");
 				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(itemFile));
-				Map<Integer, Item> item = (Map<Integer, Item>) ois.readObject();
+				Map<Integer, List<Item>> item = (Map<Integer, List<Item>>) ois.readObject();
 				ois.close();
 				
 				ObjectOutputStream oos = new ObjectOutputStream(sock.getOutputStream());
 				oos.writeObject(item);
 				oos.flush();
+				System.out.println(sock.getInetAddress() + "\tsent ItemInfo");
+				sock.close();
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -79,13 +91,15 @@ public class ExamProc {
 		@Override
 		public void run() {
 			try {
-				ServerSocket server = new ServerSocket(28131);
 				// TODO make tcp session
-				Socket sock = server.accept();
-				CocktailSendThread cst = new CocktailSendThread(sock);
-				cst.setDaemon(true);
-				cst.start();
-				
+				while (true) {
+					System.out.println("cocktail Readey");
+					Socket sock = cocktailServer.accept();
+					System.out.println(sock.getInetAddress() + "\treq Cocktail");
+					CocktailSendThread cst = new CocktailSendThread(sock);
+					cst.setDaemon(true);
+					cst.start();
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -110,20 +124,23 @@ public class ExamProc {
 				
 				ois = new ObjectInputStream(sock.getInputStream());
 				RequestMessage message = (RequestMessage) ois.readObject();
-				
 				switch (message.getRequestType()) {
 				case RequestMessage.TYPE_REQUEST :
-					List<Cocktail> cocktailList = (ArrayList<Cocktail>) cocktail.values();
+					List<String> cocktailNameList = new ArrayList<String>(cocktail.keySet());
 					Map<String, Cocktail> quiz = new HashMap<>();
 					
+					System.out.println(cocktailNameList.size());
+					
 					while (quiz.size() < message.getRequestMode()) {
-						Cocktail c = cocktailList.get((int)Math.random() * cocktailList.size());
+						Cocktail c = cocktail.get(cocktailNameList.get((int) (Math.random() * cocktailNameList.size())));
 						quiz.put(c.getName(), c);
 					}
 					
 					ObjectOutputStream oos = new ObjectOutputStream(sock.getOutputStream());
 					oos.writeObject(quiz);
 					oos.flush();
+					System.out.println(sock.getInetAddress() + "\tsent Cocktail");
+					sock.close();
 					break;
 					
 				case RequestMessage.TYPE_WAN :
