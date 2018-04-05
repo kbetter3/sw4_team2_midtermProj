@@ -1000,6 +1000,8 @@ public class QuizForm extends JFrame {
 		// TODO 뒤로가기 버튼 생성 -> SelectForm으로 이동
 		JButton backBtn = new JButton();
 		backBtn.setBounds(550, 550, 500, 150);
+		backBtn.setContentAreaFilled(false);
+		backBtn.setBorder(null);
 		backBtn.setIcon(new ImageIcon("img/backBtnNormal.png"));
 		backBtn.addMouseListener(new MouseAdapter() {
 			@Override

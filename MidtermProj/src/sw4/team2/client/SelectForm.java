@@ -148,7 +148,8 @@ public class SelectForm extends JFrame {
 		beverBtn.setIcon(new ImageIcon("img/BeverBtn.png"));
 		beverBtn.setBounds(150,200+250,400,250);
 		beverBtn.addActionListener(e->{
-			
+			BeverageForm bf = new BeverageForm(SelectForm.this.getUserId());
+			SelectForm.this.dispose();
 		});
 		selectPanel.add(beverBtn);
 		
