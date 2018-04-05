@@ -1,6 +1,9 @@
 package sw4.team2.client;
 
 import java.awt.Graphics;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,11 +19,10 @@ public class SelectForm extends JFrame {
 	private JPanel introPanel;
 	
 	private JPanel selectPanel;
-	private JButton practiceBtn, wanBtn, examBtn;
+	private JButton practiceBtn, wanBtn, examBtn, beverBtn, exitBtn;
 	
 	public SelectForm(String userID) {
 		this.userID = userID;
-		
 		
 		init();
 		event();
@@ -29,11 +31,51 @@ public class SelectForm extends JFrame {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setUndecorated(true);
 		this.setVisible(true);
-		
 	}
 
 	private void event() {
-		
+		MouseListener listener=new MouseAdapter() {
+			public void  mouseReleased(MouseEvent event) {
+				if(event.getSource()==practiceBtn) {
+					practiceBtn.setIcon( new ImageIcon("img/PracticeImg.png"));
+				}
+				else if(event.getSource()==wanBtn) {
+					wanBtn.setIcon(new ImageIcon("img/wanBtnImg.png"));
+				}
+				else if(event.getSource()==examBtn) {
+					examBtn.setIcon(new ImageIcon("img/examImg.png"));
+				}
+				else if(event.getSource()==beverBtn) {
+					beverBtn.setIcon(new ImageIcon("img/BeverBtn.png"));
+				}
+				else if(event.getSource()==exitBtn) {
+					exitBtn.setIcon(new ImageIcon("img/exitBtn3.png"));
+				}
+			}
+			
+			public void mousePressed(MouseEvent event) {
+				if(event.getSource()==practiceBtn) {
+					practiceBtn.setIcon(new ImageIcon("img/PracticeImg1.png"));
+				}
+				else if(event.getSource()==wanBtn) {
+					wanBtn.setIcon(new ImageIcon("img/wanBtnImg1.png"));
+				}
+				else if(event.getSource()==examBtn) {
+					examBtn.setIcon(new ImageIcon("img/examImg1.png"));
+				}
+				else if(event.getSource()==beverBtn) {
+					beverBtn.setIcon(new ImageIcon("img/BeverBtn1.png"));
+				}
+				else if(event.getSource()==exitBtn) {
+					exitBtn.setIcon(new ImageIcon("img/exitBtn4.png"));
+				}
+			}
+		};
+		practiceBtn.addMouseListener(listener);
+		wanBtn.addMouseListener(listener);
+		examBtn.addMouseListener(listener);
+		beverBtn.addMouseListener(listener);
+		exitBtn.addMouseListener(listener);
 	}
 
 	private void init() {
@@ -90,26 +132,59 @@ public class SelectForm extends JFrame {
 		selectPanel.setLayout(null);
 		selectPanel.setBounds(0, 0, 1600, 900);
 		
-		JButton practiceBtn = new JButton("연습모드");
-		practiceBtn.setBounds(150, 200, 400, 500);
+		practiceBtn = new JButton("");
+		practiceBtn.setBounds(150, 200,400, 250);
+		practiceBtn.setBorder(null);
+		practiceBtn.setContentAreaFilled(false);
+		practiceBtn.setIcon(new ImageIcon("img/PracticeImg.png"));
+		practiceBtn.addActionListener(e->{
+			RecepieForm recf = new RecepieForm(SelectForm.this, true);
+		});
 		selectPanel.add(practiceBtn);
 		
-		JButton wanBtn = new JButton("오답노트");
+		beverBtn = new JButton("");
+		beverBtn.setBorder(null);
+		beverBtn.setContentAreaFilled(false);
+		beverBtn.setIcon(new ImageIcon("img/BeverBtn.png"));
+		beverBtn.setBounds(150,200+250,400,250);
+		beverBtn.addActionListener(e->{
+			
+		});
+		selectPanel.add(beverBtn);
+		
+		wanBtn = new JButton("");
+		wanBtn.setBorder(null);
+		wanBtn.setContentAreaFilled(false);
 		wanBtn.setBounds(150 + 450, 200, 400, 500);
+		wanBtn.setIcon(new ImageIcon("img/wanBtnImg.png"));
+		wanBtn.addActionListener(e->{
+			try {
+				WANote wanote = new WANote(SelectForm.this, true);
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			});
 		selectPanel.add(wanBtn);
 		
-		JButton examBtn = new JButton("실전모드");
+		examBtn = new JButton("");
+		examBtn.setBorder(null);
+		examBtn.setContentAreaFilled(false);
 		examBtn.setBounds(150 + 900, 200, 400, 500);
+		examBtn.setIcon(new ImageIcon("img/examImg.png"));
 		examBtn.addActionListener(e->{
 			QuizForm qf = new QuizForm(SelectForm.this.getUserId(), QuizForm.MODE_EXAM, null);
-//			qf.setVisible(true);
 			SelectForm.this.dispose();
 		});
 		selectPanel.add(examBtn);
 		
-		JButton exitBtn = new JButton("종료하기");
+		exitBtn = new JButton("");
+		exitBtn.setBorder(null);
+		exitBtn.setContentAreaFilled(false);
+		exitBtn.setIcon(new ImageIcon("img/exitBtn3.png"));
 		exitBtn.setBounds(1300, 775, 250, 75);
 		exitBtn.addActionListener(e->{System.exit(0);});
 		selectPanel.add(exitBtn);
 	}
+	
 }

@@ -22,6 +22,7 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -144,7 +145,8 @@ public class QuizForm extends JFrame {
 	private Color pinkColor = new Color(255, 202, 219);
 
 	public QuizForm(String userID, int mode, Cocktail selectedCocktail) {
-		this.userId = userId;
+		this.userId = userID;
+		System.out.println("QuizForm : " + userId);
 		this.selectedCocktail = selectedCocktail;
 		this.mode = mode;
 
@@ -684,11 +686,19 @@ public class QuizForm extends JFrame {
 
 	private void initRightPanel() {
 		// TODO
-		rightPanel = new JPanel();
+		rightPanel = new JPanel() {
+			@Override
+			protected void paintComponent(Graphics g) {
+				// TODO Auto-generated method stub
+				super.paintComponent(g);
+				g.drawImage(Toolkit.getDefaultToolkit().getImage("img/sequence.png"), 0, 0, 300, 650, this);
+			}
+		};
 		rightPanel.setBounds(1300, 190, 300, 710);
 		rightPanel.setLayout(null);
-
-		JLabel rBox = new JLabel("조주");
+		
+		// 조주
+		JLabel rBox = new JLabel();
 		rBox.setVerticalAlignment(JLabel.CENTER);
 		rBox.setHorizontalAlignment(JLabel.CENTER);
 		rBox.setFont(new Font("", 0, 20));
@@ -698,6 +708,8 @@ public class QuizForm extends JFrame {
 		recipeBtnList = new ArrayList<>();
 		recipePanel = new JPanel();
 		recipePanel.setBounds(0, 50, 300, 600);
+		recipePanel.setBackground(new Color(0, 0, 0, 0));
+		recipePanel.setOpaque(false);
 		recipePanel.setLayout(null);
 
 		rightPanel.add(recipePanel);
@@ -727,11 +739,20 @@ public class QuizForm extends JFrame {
 
 
 	private void initLeftPanel() {
-		leftPanel = new JPanel();
+		leftPanel = new JPanel() {
+			@Override
+			protected void paintComponent(Graphics g) {
+//				g.drawImage(ImageIO.read(new File("img/storage.png")), 0, 0, 300, 650, this);
+				
+				super.paintComponent(g);
+				g.drawImage(Toolkit.getDefaultToolkit().getImage("img/storage.png"), 0, 0, 300, 650, 0, 0, 300, 650, this);
+			}
+		};
 		leftPanel.setBounds(0, 190, 300, 710);
 		leftPanel.setLayout(null);
 
-		JLabel lBox = new JLabel("재료창고");
+		// 재료창고
+		JLabel lBox = new JLabel();
 		lBox.setHorizontalAlignment(JLabel.CENTER);
 		lBox.setVerticalAlignment(JLabel.CENTER);
 		lBox.setFont(new Font("", Font.PLAIN, 20));
@@ -742,6 +763,8 @@ public class QuizForm extends JFrame {
 		itemPanel = new JPanel();
 		itemPanel.setBounds(0, 50, 300, 600);
 		itemPanel.setLayout(null);
+		itemPanel.setBackground(new Color(0, 0, 0, 0));
+		itemPanel.setOpaque(false);
 		leftPanel.add(itemPanel);
 		displaySelectedItemBtn();
 
@@ -761,12 +784,13 @@ public class QuizForm extends JFrame {
 		time = 400;
 		timerLabel = new JLabel();
 		timerLabel.setBounds(1200, 0, 400, 190);
+		timerLabel.setIcon(new ImageIcon("img/timer.png"));
 		timerLabel.setHorizontalTextPosition(JLabel.CENTER);
 		timerLabel.setVerticalTextPosition(JLabel.CENTER);
 		timerLabel.setBackground(pinkColor);
-		timerLabel.setForeground(Color.BLUE);
+		timerLabel.setForeground(Color.WHITE);
 		timerLabel.setText((time / 60) + " : " + (time % 60));
-		timerLabel.setFont(new Font("", Font.PLAIN, 60));
+		timerLabel.setFont(new Font("", Font.BOLD, 60));
 		topPanel.add(timerLabel);
 
 		cocktailNamePanel = new JPanel();
@@ -974,8 +998,19 @@ public class QuizForm extends JFrame {
 		resultPanel.add(resultCocktailPanel);
 
 		// TODO 뒤로가기 버튼 생성 -> SelectForm으로 이동
-		JButton backBtn = new JButton("뒤로가기");
+		JButton backBtn = new JButton();
 		backBtn.setBounds(550, 550, 500, 150);
+		backBtn.setIcon(new ImageIcon("img/backBtnNormal.png"));
+		backBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				backBtn.setIcon(new ImageIcon("img/backBtnPressed.png"));
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				backBtn.setIcon(new ImageIcon("img/backBtnNormal.png"));
+			}
+		});
 		backBtn.addActionListener(e->{
 			SelectForm sf = new SelectForm(userId);
 			QuizForm.this.dispose();
@@ -1115,7 +1150,8 @@ public class QuizForm extends JFrame {
 				if (time == 90) {
 					timerLabel.setForeground(Color.RED);
 				}
-				timerLabel.setText((time / 60) + " : " + (time % 60));
+				DecimalFormat df = new DecimalFormat("00");
+				timerLabel.setText((time / 60) + " : " + df.format(time % 60));
 			}
 
 			initResultPanle();
