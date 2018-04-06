@@ -160,7 +160,7 @@ public class SelectForm extends JFrame {
 		wanBtn.setIcon(new ImageIcon("img/wanBtnImg.png"));
 		wanBtn.addActionListener(e->{
 			try {
-				WANote wanote = new WANote(SelectForm.this, true);
+				WANote wanote = new WANote(SelectForm.this.getUserId(), SelectForm.this, true);
 			} catch (ClassNotFoundException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

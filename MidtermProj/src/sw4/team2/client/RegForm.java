@@ -59,7 +59,7 @@ public class RegForm extends JDialog {
 					if (pwTf.getPassword().length > 0 && pwStr.equals(pwChStr)) {
 //						Socket sock = new Socket(InetAddress.getByName("kbetter3.iptime.org"), 2240);
 						Socket sock = HostReader.getHost(2240);
-						Member member = new Member(idTf.getText(), pwTf.getPassword().toString(), Member.REGISTER);
+						Member member = new Member(idTf.getText(), new String(pwTf.getPassword()), Member.REGISTER);
 						ObjectOutputStream oos = new ObjectOutputStream(sock.getOutputStream());
 						oos.writeObject(member);
 						oos.flush();

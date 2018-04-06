@@ -29,6 +29,7 @@ import sw4.team2.common.Cocktail;
 import sw4.team2.common.HostReader;
 
 public class WANote extends JDialog {
+	private String userId;
 	private JPanel MainPanel = new JPanel();
 
 	private ImageIcon icon1 = new ImageIcon("img/Wanss.png");
@@ -43,17 +44,17 @@ public class WANote extends JDialog {
 			ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 
 
-	public WANote(Frame f, boolean modal) throws ClassNotFoundException {
+	public WANote(String userID, Frame f, boolean modal) throws ClassNotFoundException {
 		super(f, modal);
 		this.setTitle("오답노트");
 		this.setBounds(0,0,500,500);
 		this.setLocationByPlatform(true);
 		this.setResizable(false);
 		this.init();
+		this.userId = userID;
 		Thread thread = new Thread() {
 			@Override
 			public void run() {
-				String userId = "kkk";
 				Map<String, Cocktail> wanMap;
 				try {
 //					Socket sock = new Socket(InetAddress.getByName("kbetter3.iptime.org"), 28129);
