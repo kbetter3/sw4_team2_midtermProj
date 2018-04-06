@@ -10,6 +10,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -31,6 +34,7 @@ import javax.swing.KeyStroke;
 
 import com.sun.glass.events.KeyEvent;
 
+import sw4.team2.common.HostReader;
 import sw4.team2.common.Member;
 
 public class LoginForm extends JFrame {
@@ -59,7 +63,8 @@ public class LoginForm extends JFrame {
 		try {
 			boolean login = false;
 			member = new Member(idTf.getText(), new String(pwTf.getPassword()), Member.LOGIN);
-			Socket sock = new Socket(InetAddress.getByName("kbetter3.iptime.org"), 2240);
+//			Socket sock = new Socket(InetAddress.getByName("kbetter3.iptime.org"), 2240);
+			Socket sock = HostReader.getHost(2240);
 			ObjectOutputStream oos = new ObjectOutputStream(sock.getOutputStream());
 			oos.writeObject(member);
 			oos.flush();

@@ -26,20 +26,21 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import sw4.team2.common.Cocktail;
+import sw4.team2.common.HostReader;
 
 public class WANote extends JDialog {
 	private JPanel MainPanel = new JPanel();
-	
+
 	private ImageIcon icon1 = new ImageIcon("img/Wanss.png");
-	
+
 	private JToolBar toolBar = new JToolBar();
 	private JLabel Wanlb = new JLabel("");
-	
+
 	private JTextArea Jta = new JTextArea();
-	
+
 	JScrollPane sp = new JScrollPane(Jta, 
-            ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, 
-            ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+			ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, 
+			ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 
 
 	public WANote(Frame f, boolean modal) throws ClassNotFoundException {
@@ -53,40 +54,41 @@ public class WANote extends JDialog {
 			@Override
 			public void run() {
 				String userId = "kkk";
-			      Map<String, Cocktail> wanMap;
-			      try {
-			         Socket sock = new Socket(InetAddress.getByName("kbetter3.iptime.org"), 28129);
-			         ObjectOutputStream oos = new ObjectOutputStream(sock.getOutputStream());
-			         oos.writeObject(userId);
-			         oos.flush();
-			         
-			         ObjectInputStream ois = new ObjectInputStream(sock.getInputStream());
-			         wanMap = (Map<String, Cocktail>) ois.readObject();
-			         sock.close();
-			         
-			         System.out.println(wanMap.size());
-			         
-			         for (String key : wanMap.keySet()) {
-			            // TODO wanMap¿¡¼­ ²¨³»¼­ »ç¿ëÇÏ¸éµÊ
-			        	 String name=key;
-			        	 Jta.append(name);
-			         }
-			      } catch (UnknownHostException e) {
-			         e.printStackTrace();
-			      } catch (IOException e) {
-			         e.printStackTrace();
-			      } catch (ClassNotFoundException e) {
-			         e.printStackTrace();
-			      }
+				Map<String, Cocktail> wanMap;
+				try {
+//					Socket sock = new Socket(InetAddress.getByName("kbetter3.iptime.org"), 28129);
+					Socket sock = HostReader.getHost(28129);
+					ObjectOutputStream oos = new ObjectOutputStream(sock.getOutputStream());
+					oos.writeObject(userId);
+					oos.flush();
+
+					ObjectInputStream ois = new ObjectInputStream(sock.getInputStream());
+					wanMap = (Map<String, Cocktail>) ois.readObject();
+					sock.close();
+
+					System.out.println(wanMap.size());
+
+					for (String key : wanMap.keySet()) {
+						// TODO wanMap¿¡¼­ ²¨³»¼­ »ç¿ëÇÏ¸éµÊ
+						String name=key + "\n";
+						Jta.append(name);
+					}
+				} catch (UnknownHostException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				}
 			}
 		};
-		
+
 		thread.setDaemon(true);
 		thread.start();
-		
+
 		this.display();
 		this.setVisible(true);
-		
+
 	}
 	public void init() {
 		MainPanel.setLayout(new BorderLayout());

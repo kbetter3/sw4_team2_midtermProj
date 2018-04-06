@@ -50,6 +50,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 
 import sw4.team2.common.Cocktail;
+import sw4.team2.common.HostReader;
 import sw4.team2.common.Item;
 import sw4.team2.common.Recipe;
 import sw4.team2.common.RequestMessage;
@@ -696,7 +697,7 @@ public class QuizForm extends JFrame {
 		};
 		rightPanel.setBounds(1300, 190, 300, 710);
 		rightPanel.setLayout(null);
-		
+
 		// а╤аж
 		JLabel rBox = new JLabel();
 		rBox.setVerticalAlignment(JLabel.CENTER);
@@ -742,8 +743,8 @@ public class QuizForm extends JFrame {
 		leftPanel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
-//				g.drawImage(ImageIO.read(new File("img/storage.png")), 0, 0, 300, 650, this);
-				
+				//				g.drawImage(ImageIO.read(new File("img/storage.png")), 0, 0, 300, 650, this);
+
 				super.paintComponent(g);
 				g.drawImage(Toolkit.getDefaultToolkit().getImage("img/storage.png"), 0, 0, 300, 650, 0, 0, 300, 650, this);
 			}
@@ -1036,7 +1037,8 @@ public class QuizForm extends JFrame {
 		@Override
 		public void run() {
 			try {
-				Socket sock = new Socket(InetAddress.getByName("kbetter3.iptime.org"), 28130);
+//				Socket sock = new Socket(InetAddress.getByName("kbetter3.iptime.org"), 28130);
+				Socket sock = HostReader.getHost(28130);
 				ObjectInputStream ois = new ObjectInputStream(sock.getInputStream());
 				itemInfoMap = (Map<Integer, List<Item>>) ois.readObject();
 
@@ -1095,7 +1097,8 @@ public class QuizForm extends JFrame {
 		@Override
 		public void run() {
 			try {
-				Socket sock = new Socket(InetAddress.getByName("kbetter3.iptime.org"), 28131);
+//				Socket sock = new Socket(InetAddress.getByName("kbetter3.iptime.org"), 28131);
+				Socket sock = HostReader.getHost(28131);
 				ObjectOutputStream oos = new ObjectOutputStream(sock.getOutputStream());
 				oos.writeObject(msg);
 				oos.flush();
@@ -1113,7 +1116,8 @@ public class QuizForm extends JFrame {
 		@Override
 		public void run() {
 			try {
-				Socket sock = new Socket(InetAddress.getByName("kbetter3.iptime.org"), 28131);
+//				Socket sock = new Socket(InetAddress.getByName("kbetter3.iptime.org"), 28131);
+				Socket sock = HostReader.getHost(28131);
 				ObjectOutputStream oos = new ObjectOutputStream(sock.getOutputStream());
 				oos.writeObject(msg);
 				oos.flush();

@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import sw4.team2.common.HostReader;
 import sw4.team2.common.Member;
 
 public class RegForm extends JDialog {
@@ -56,7 +57,8 @@ public class RegForm extends JDialog {
 					String pwStr = new String(pwTf.getPassword());
 					String pwChStr = new String(pwCheckTf.getPassword());
 					if (pwTf.getPassword().length > 0 && pwStr.equals(pwChStr)) {
-						Socket sock = new Socket(InetAddress.getByName("kbetter3.iptime.org"), 2240);
+//						Socket sock = new Socket(InetAddress.getByName("kbetter3.iptime.org"), 2240);
+						Socket sock = HostReader.getHost(2240);
 						Member member = new Member(idTf.getText(), pwTf.getPassword().toString(), Member.REGISTER);
 						ObjectOutputStream oos = new ObjectOutputStream(sock.getOutputStream());
 						oos.writeObject(member);
